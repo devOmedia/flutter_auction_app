@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1093367672917",
+    "project_id": "amadia-auction",
+    "storage_bucket": "amadia-auction.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093367672917:android:f43f40299f845ca81764dc",
+        "android_client_info": {
+          "package_name": "com.example.flutter_auction_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093367672917-hfdmqibs7vonlfgimccrf0ehthuejgqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_auction_app",
+            "certificate_hash": "41761d358093d6ee0540f7283fdf6f98ff9b5053"
+          }
+        },
+        {
+          "client_id": "1093367672917-a0d1a2i6qci7gnif7e47nrk3ilp8tcpd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkn8LN-P0XXTIbG7ZRiP5l7l9rqqZxtzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093367672917-a0d1a2i6qci7gnif7e47nrk3ilp8tcpd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
