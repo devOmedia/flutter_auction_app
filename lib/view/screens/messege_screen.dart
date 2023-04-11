@@ -35,25 +35,23 @@ class _NewMessageScreenState extends ConsumerState<NewMessageScreen> {
         if (ref.watch(isManagerProvider)) "sendby": "mr. manager",
         if (ref.watch(isClientProvider)) "sendby": "nirob khan",
         if (ref.watch(isCleanerProvider)) "sendby": "mr. cleaner",
-        if (ref.watch(isClientProvider)) "sendby": "mr.  guard",
-        
+        if (ref.watch(isGuardProvider)) "sendby": "mr.  guard",
       };
 //clean text editing ctr.
       _msgCtr.clear();
 //send msg to firebase
       firestore
           .collection("chats")
-          .doc(widget.docID != "mahamudul hasan"
-              ? "qbd4j93SX2NqSMgLKMsm"
-              : "hasan")
+          .doc(widget.docID)
           .collection("chat")
           .add(messages);
     }
   }
 
   _isSender(String senderName) {
+    print("sender $senderName");
 // if the msg is received by other then it returns false otherwise false.
-    if (senderName != widget.name) {
+    if (senderName.toLowerCase() != widget.name.toLowerCase()) {
       return true;
     } else {
       return false;
@@ -184,9 +182,7 @@ class _NewMessageScreenState extends ConsumerState<NewMessageScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                 stream: firestore
                     .collection("chats")
-                    .doc(widget.docID != "Mahamudul Hasan"
-                        ? "qbd4j93SX2NqSMgLKMsm"
-                        : "hasan")
+                    .doc(widget.docID)
                     .collection("chat")
                     .orderBy("time", descending: true)
                     .snapshots(),
@@ -236,7 +232,7 @@ class _NewMessageScreenState extends ConsumerState<NewMessageScreen> {
                       ),
                     );
                   } else {
-                    return Container();
+                    return const SizedBox();
                   }
                 },
               )),
@@ -254,7 +250,7 @@ class _NewMessageScreenState extends ConsumerState<NewMessageScreen> {
         Expanded(
           flex: 6,
           child: Container(
-            margin: const EdgeInsets.only(left: 8),
+            margin: const EdgeInsets.only(top: 8, left: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             height: size.height * 0.07,
             decoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auction_app/model/constants.dart';
 import 'package:flutter_auction_app/view/screens/add_employee.dart';
+import 'package:flutter_auction_app/view/screens/login_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AllUserScreen extends ConsumerStatefulWidget {
@@ -16,6 +17,7 @@ class _AllUserScreenState extends ConsumerState<AllUserScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final userName = ref.watch(userNameState);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -57,8 +59,7 @@ class _AllUserScreenState extends ConsumerState<AllUserScreen> {
                     child: ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: ((context, index) {
-                        if (snapshot.data!.docs[index]["name"] !=
-                            "Mr. Manager") {
+                        if (snapshot.data!.docs[index]["name"] != userName) {
                           return Container(
                             margin: const EdgeInsets.all(8),
                             //height: size.height * 0.15,
@@ -100,7 +101,7 @@ class _AllUserScreenState extends ConsumerState<AllUserScreen> {
                             ),
                           );
                         }
-                        return null;
+                        return const SizedBox();
                       }),
                     ),
                   );

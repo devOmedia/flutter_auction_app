@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auction_app/view/screens/home_screen.dart';
 import 'package:flutter_auction_app/view/screens/user_messanger.dart';
-import 'package:flutter_auction_app/view/widgets/auth_appbar.dart';
 import 'package:flutter_auction_app/view/widgets/auth_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +13,8 @@ final isClientProvider = StateProvider<bool>((ref) => false);
 final isManagerProvider = StateProvider<bool>((ref) => false);
 final isCleanerProvider = StateProvider<bool>((ref) => false);
 final isGuardProvider = StateProvider<bool>((ref) => false);
+
+final userNameState = StateProvider<String?>((ref) => null);
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -62,7 +63,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ///===========================> appbar
-              AuthAppBar(size: size),
+              //AuthAppBar(size: size),
+              Text(
+                "Let's get you stated",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall!
+                    .copyWith(color: KConstColors.secondaryColor),
+              ),
 
               ///=============================> inputfields
               Form(
@@ -108,22 +116,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
 
               ///=====================================> forgetbutton
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    ///tracking of going to the forget screens
-                  },
-                  child: const Text(
-                    'Forget Password?',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff6A707C),
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: TextButton(
+              //     onPressed: () {
+              //       ///tracking of going to the forget screens
+              //     },
+              //     child: const Text(
+              //       'Forget Password?',
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.w600,
+              //         color: Color(0xff6A707C),
+              //         fontSize: 14,
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               ///=========================================> buttons
               AuthButton(
@@ -137,18 +145,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       //login in as manager
                       if (_passwordController.text == "1234") {
                         ref.read(isManagerProvider.notifier).state = true;
+                        ref.read(userNameState.notifier).state = "Mr. Manager";
                         Navigator.pushReplacementNamed(context, HomeScreen.id);
                       }
                     } else if (_emailController.text == "nirob@gmail.com") {
                       // login as client
                       if (_passwordController.text == "1234") {
                         ref.read(isClientProvider.notifier).state = true;
+                        ref.read(userNameState.notifier).state = "Nirob Khan";
                         Navigator.pushReplacementNamed(context, HomeScreen.id);
                       }
                     } else if (_emailController.text == "cleaner@gmail.com") {
                       // login as client
                       if (_passwordController.text == "1234") {
                         ref.read(isCleanerProvider.notifier).state = true;
+                        ref.read(userNameState.notifier).state = "Mr. Cleaner";
                         Navigator.pushReplacementNamed(
                             context, MessengerUserScreen.id);
                       }
@@ -156,6 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       // login as client
                       if (_passwordController.text == "1234") {
                         ref.read(isGuardProvider.notifier).state = true;
+                        ref.read(userNameState.notifier).state = "Mr. Guard";
                         Navigator.pushReplacementNamed(
                             context, MessengerUserScreen.id);
                       }

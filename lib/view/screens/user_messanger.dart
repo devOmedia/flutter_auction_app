@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auction_app/model/constants.dart';
 import 'package:flutter_auction_app/view/screens/login_screen.dart';
@@ -15,9 +19,28 @@ class MessengerUserScreen extends ConsumerStatefulWidget {
 }
 
 class _MessengerUserScreenState extends ConsumerState<MessengerUserScreen> {
+  String getConversationId(String user1Id, String user2Id) {
+    // Sort the user IDs alphabetically to ensure consistency
+    List<String> sortedIds = [user1Id, user2Id]..sort();
+
+    // Concatenate the sorted IDs with a separator
+    String concatenatedIds = sortedIds.join(':');
+
+    // Hash the concatenated IDs to produce a unique ID
+    var bytes = utf8.encode(concatenatedIds);
+    var digest = sha1.convert(bytes);
+    String conversationId = digest.toString();
+
+    print("conv id:=====>>> $conversationId");
+
+    return conversationId;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final user = ref.watch(userNameState);
+    log("user====>> $user");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -47,90 +70,48 @@ class _MessengerUserScreenState extends ConsumerState<MessengerUserScreen> {
                 child: ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: ((context, index) {
-                    if (ref.watch(isManagerProvider)) {
-                      if (snapshot.data!.docs[index]["name"] != "Mr. Manager") {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NewMessageScreen(
-                                  name: snapshot.data!.docs[index]["name"],
-                                  image: snapshot.data!.docs[index]["image"],
-                                  docID: snapshot.data!.docs[index]["name"]
-                                      .toString()
-                                      .toLowerCase(),
+                    if (snapshot.data!.docs[index]["name"] != user) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewMessageScreen(
+                                name: snapshot.data!.docs[index]["name"],
+                                image: snapshot.data!.docs[index]["image"],
+                                docID: getConversationId(
+                                  user!,
+                                  snapshot.data!.docs[index]["name"],
                                 ),
                               ),
-                            );
-                          },
-                          child: Container(
-                              margin: const EdgeInsets.all(8),
-                              //height: size.height * 0.15,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: KConstColors.hintColor,
-                              ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.all(8),
-                                title: Text(snapshot.data!.docs[index]["name"]),
-                                leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  child: SizedBox(
-                                    height: size.height * 0.1,
-                                    width: size.width * 0.15,
-                                    child: Image.network(
-                                      snapshot.data!.docs[index]["image"],
-                                    ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.all(8),
+                            //height: size.height * 0.15,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: KConstColors.hintColor,
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(8),
+                              title: Text(snapshot.data!.docs[index]["name"]),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: SizedBox(
+                                  height: size.height * 0.1,
+                                  width: size.width * 0.15,
+                                  child: Image.network(
+                                    snapshot.data!.docs[index]["image"],
                                   ),
                                 ),
-                              )),
-                        );
-                      }
-                    } else {
-                      if (snapshot.data!.docs[index]["name"] != "Nirob Khan") {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NewMessageScreen(
-                                  name: snapshot.data!.docs[index]["name"],
-                                  image: snapshot.data!.docs[index]["image"],
-                                  docID: snapshot.data!.docs[index]["name"]
-                                      .toString()
-                                      .toLowerCase()
-                                      .trim(),
-                                ),
                               ),
-                            );
-                          },
-                          child: Container(
-                              margin: const EdgeInsets.all(8),
-                              //height: size.height * 0.15,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: KConstColors.hintColor,
-                              ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.all(8),
-                                title: Text(snapshot.data!.docs[index]["name"]),
-                                leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  child: SizedBox(
-                                    height: size.height * 0.1,
-                                    width: size.width * 0.15,
-                                    child: Image.network(
-                                      snapshot.data!.docs[index]["image"],
-                                    ),
-                                  ),
-                                ),
-                              )),
-                        );
-                      }
+                            )),
+                      );
                     }
 
-                    return const Text("");
+                    return const SizedBox();
                   }),
                 ),
               );

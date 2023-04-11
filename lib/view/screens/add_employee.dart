@@ -16,6 +16,7 @@ class AddEmployeeScreen extends ConsumerStatefulWidget {
 
 class _AppEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
   late TextEditingController _name;
+  late TextEditingController _userName;
 
   late TextEditingController _designation;
   late TextEditingController _salary;
@@ -25,6 +26,7 @@ class _AppEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
     _name = TextEditingController();
     _designation = TextEditingController();
     _salary = TextEditingController();
+    _userName = TextEditingController();
     super.initState();
   }
 
@@ -33,6 +35,7 @@ class _AppEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
     _name.dispose();
     _designation.dispose();
     _salary.dispose();
+    _userName.dispose();
     super.dispose();
   }
 
@@ -78,6 +81,7 @@ class _AppEmployeeScreenState extends ConsumerState<AddEmployeeScreen> {
                   }
                 },
               ),
+
               SizedBox(height: size.height * 0.02),
               CustomTextInputfield(
                 hintText: "Employee Designation ",
